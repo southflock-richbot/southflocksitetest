@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CUSTOMIZE: Page Title & SEO -->
+    <title>Jan de Installatieman | SouthFlock</title>
+    <!-- SEO: Cross-Linking -->
+    <link rel="prev" href="/previous-project" />
+    <link rel="next" href="/next-project" />
+    <meta name="description"
+        content="Brand identity and motion design for Jan de Installatieman. SouthFlock created a comprehensive visual system including logo design, brand guidelines, and animated content.">
+
+    <link rel="icon" href="assets/img/brand/01SF_Favcon.svg" type="image/svg+xml">
+
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="../assets/js/header.js" defer></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#f95202',
+                        'brand-blue': '#0033ff',
+                    },
+                    fontFamily: {
+                        'sans': ['Satoshi', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @font-face {
+            font-family: 'AV Estiana';
+            src: url('../../Assets/fonts/AVEstiana-LightOblique.ttf') format('truetype');
+            font-weight: 300;
+            font-style: oblique;
+        }
+
+        :root {
+            --bg: #faf9f6;
+            --dark: #0e0e0e;
+            --accent: #f95202;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--dark);
+            font-family: 'Satoshi', sans-serif;
+            overflow-x: hidden;
+            cursor: none !important;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+        }
+
+        a,
+        button,
+        input,
+        select,
+        textarea,
+        [role="button"] {
+            cursor: none !important;
+        }
+
+        /* Custom Cursor */
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+
+        #cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid white;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s;
+            mix-blend-mode: difference;
+        }
+
+        /* Hero */
+        .hero-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 5vw;
+            background-color: var(--dark);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* These calculations ensure the 16:9 video covers the container */
+            width: 100vw;
+            height: 56.25vw;
+            /* 16:9 Aspect Ratio */
+            min-height: 100vh;
+            min-width: 177.77vh;
+            /* 16:9 Aspect Ratio */
+            transform: translate(-50%, -50%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .huge-text {
+            font-size: clamp(4rem, 14vw, 11rem);
+            line-height: 0.8;
+            letter-spacing: -0.05em;
+            font-weight: 500;
+        }
+
+
+        .reveal-wrap {
+            overflow: hidden;
+            display: block;
+        }
+
+        .reveal-item {
+            display: block;
+            transform: translateY(100%);
+        }
+
+        .section-padding {
+            padding: 12vw 8vw;
+        }
+
+        /* Image Parallax */
+        .img-parallax-wrap {
+            width: 100%;
+            height: 110vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .img-parallax-wrap img {
+            width: 100%;
+            height: 140%;
+            object-fit: cover;
+            position: absolute;
+            top: -20%;
+        }
+
+        .split-divider {
+            width: 100%;
+            height: 1px;
+            background: black;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        /* Mobile Menu Styles (hidden by default on desktop) */
+        .mobile-menu-btn {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+
+            #cursor-dot,
+            #cursor-ring {
+                display: none;
+            }
+
+            body,
+            a,
+            button,
+            input,
+            select,
+            textarea,
+            [role="button"] {
+                cursor: auto !important;
+            }
+
+            .section-padding {
+                padding: 80px 24px;
+            }
+
+            /* Mobile Header */
+            #main-nav {
+                padding: 1.2rem 1.5rem !important;
+                flex-wrap: wrap;
+            }
+
+            #main-nav img {
+                height: 1.5rem !important;
+            }
+
+            .desktop-nav {
+                display: none !important;
+                /* Hide desktop navigation on mobile */
+            }
+
+            .menu-btn {
+                display: flex !important;
+                /* Show hamburger on mobile */
+            }
+
+            /* Hamburger menu active state - 2 lines forming X */
+            #menu-btn.active span:nth-child(1) {
+                transform: translateY(4px) rotate(45deg);
+            }
+
+            #menu-btn.active span:nth-child(2) {
+                transform: translateY(-4px) rotate(-45deg);
+            }
+
+            .mobile-menu.active {
+                opacity: 1 !important;
+                pointer-events: all !important;
+            }
+
+            /* Hero Section Mobile */
+            .hero-container {
+                padding: 8vw 5vw !important;
+                min-height: 100vh;
+            }
+
+            .huge-text {
+                font-size: clamp(3rem, 15vw, 6rem) !important;
+                line-height: 0.9 !important;
+            }
+
+            .hero-video-bg {
+                /* Simplified mobile hero video - subtle and clean */
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+                opacity: 0.15;
+                /* Much more subtle on mobile */
+            }
+
+            /* Parallax images on mobile */
+            .img-parallax-wrap {
+                height: 60vh;
+            }
+
+            .img-parallax-wrap img {
+                height: 100%;
+                top: 0;
+            }
+
+            /* Grid layouts */
+            .grid {
+                grid-template-columns: 1fr !important;
+                gap: 2rem !important;
+            }
+
+            /* Text sizing */
+            h1 {
+                font-size: 2.5rem !important;
+            }
+
+            h2 {
+                font-size: 1.75rem !important;
+            }
+
+            h3 {
+                font-size: 1.25rem !important;
+            }
+
+            p {
+                font-size: 1rem !important;
+            }
+
+            /* Touch targets */
+            a,
+            button {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://southflock.com/"
+      },{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Work",
+        "item": "https://southflock.com/#work"
+      },{
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Steven Beukman Podcast"
+      }]
+    }
+    </script>
+</head>
+
+<body>
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Sticky Header -->
+    <sf-header></sf-header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <!-- CUSTOMIZE: Project name, tags, video background -->
+        <section class="hero-container" data-color="dark">
+            <!-- Breadcrumbs -->
+            <nav aria-label="Breadcrumb" class="relative z-10 w-full pt-20 pb-10 hidden md:block">
+                <ol class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] font-medium text-white/60">
+                    <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                    <li><span class="opacity-30">/</span></li>
+                    <li><a href="/index.html#work" class="hover:text-white transition-colors">Work</a></li>
+                    <li><span class="opacity-30">/</span></li>
+                    <li aria-current="page" class="text-white">Jan de Installatieman</li>
+                </ol>
+            </nav>
+
+            <!-- Optional: Add video background -->
+            <iframe class="hero-video-bg"
+                src="https://player.vimeo.com/video/1157610130?background=1&autoplay=1&loop=1&muted=1&controls=0&playsinline=1"
+                frameborder="0" allow="autoplay; fullscreen" style="pointer-events: none;">
+            </iframe>
+
+            <div class="relative z-10 w-full">
+                <div class="flex justify-between items-end w-full mb-8">
+                    <div class="reveal-wrap">
+                        <!-- CUSTOMIZE: Project tags -->
+                        <span class="reveal-item text-xs uppercase tracking-[0.3em] font-bold opacity-70">
+                            Brand Identity • Motion Design • Web Design
+                        </span>
+                    </div>
+                    <div class="reveal-wrap text-right hidden md:block">
+                        <!-- CUSTOMIZE: Project number (optional) -->
+                        <span class="reveal-item text-xs uppercase tracking-[0.3em] font-bold opacity-70">
+                            2025
+                        </span>
+                    </div>
+                </div>
+
+                <!-- CUSTOMIZE: Project Name -->
+                <div class="reveal-wrap">
+                    <h1 class="huge-text reveal-item font-bold uppercase">Jan<br><br>
+                    </h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT OVERVIEW SECTION -->
+        <!-- CUSTOMIZE: Challenge, approach, results -->
+        <section class="py-20 md:py-32 bg-white" data-color="light">
+            <div class="max-w-[1920px] mx-auto px-6 md:px-[60px]">
+
+                <div class="w-full h-[1px] bg-gray-100 mb-12"></div>
+
+                <div class="flex flex-col gap-20">
+
+                    <div class="max-w-3xl">
+                        <div class="reveal-wrap mb-6">
+                            <span
+                                class="reveal-item text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Overview</span>
+                        </div>
+                        <div class="reveal-wrap">
+                            <h2 class="reveal-item text-2xl md:text-3xl font-medium leading-snug text-black">
+                                Developing a professional and recognizable visual system for a Dutch installation and
+                                supply company, emphasizing reliability and technical expertise. </h2>
+                        </div>
+                    </div>
+
+                    <div class="w-full">
+                        <div class="hidden md:grid grid-cols-3 pb-4 border-b border-gray-100">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Client /
+                                Industry</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Services</span>
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Focus</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 py-8 gap-8 md:gap-0">
+                            <div class="reveal-wrap">
+                                <div class="reveal-item">
+                                    <p class="text-sm md:text-base font-medium text-black">Digitl Sky / Jan de
+                                        Installatieman</p>
+                                    <p class="text-sm text-gray-500">Construction (Netherlands)</p>
+                                </div>
+                            </div>
+
+                            <div class="reveal-wrap">
+                                <div class="reveal-item">
+                                    <p class="text-sm md:text-base font-medium text-black leading-relaxed">
+                                        Brand Identity, Motion Graphics,<br class="hidden md:block"> Brand Design
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="reveal-wrap md:text-right">
+                                <div class="reveal-item">
+                                    <p class="text-sm md:text-base font-medium text-black">2025</p>
+                                    <p class="text-sm text-gray-500">Professional Recognition</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-[1px] bg-gray-100"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div class="reveal-wrap">
+                            <div class="reveal-item">
+                                <h4 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">The
+                                    Challenge</h4>
+                                <p class="text-lg text-gray-600 leading-relaxed">
+                                    The client required a bold identity to stand out in the competitive Dutch
+                                    construction market while appealing to both residential and commercial sectors.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="reveal-wrap">
+                            <div class="reveal-item">
+                                <h4 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">The
+                                    Solution</h4>
+                                <p class="text-lg text-gray-600 leading-relaxed">
+                                    We designed a functional visual system featuring strong typography and a practical
+                                    color palette, optimized for vehicles, uniforms, and digital platforms.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- VIDEO/IMAGE GALLERY - Style Layout -->
+        <section class="py-20 md:py-32 bg-black" data-color="dark">
+            <div class="max-w-[1920px] mx-auto px-6 md:px-[60px] space-y-8 md:space-y-12">
+
+                <!-- Hero Video - Full Width -->
+                <div class="video-container group relative rounded-2xl overflow-hidden bg-black">
+
+                    <div id="play-overlay"
+                        class="absolute inset-0 flex items-center justify-center bg-black/40 cursor-pointer group-hover:bg-black/20 transition-all">
+                        <div
+                            class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
+                            <div
+                                class="w-0 h-0 border-t-[15px] border-t-transparent border-l-[25px] border-l-white border-b-[15px] border-b-transparent ml-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid of 3 Videos (2x2 layout with 3 filled) -->
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-6 md:gap-12">
+                    <!-- Video 2 -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <iframe
+                            src="https://player.vimeo.com/video/1157609010?background=1&autoplay=1&loop=1&muted=1&byline=0&title=0&playsinline=1"
+                            frameborder="0" allow="autoplay; fullscreen" class="w-full aspect-video">
+                        </iframe>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-construction.webp"
+                            alt="Project image 2 - Logo design variations" class="w-full h-auto object-contain">
+                    </div>
+
+                    <!-- Image -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-construction-mockup.webp"
+                            alt="Project image 2 - Logo design variations" class="w-full h-auto object-contain">
+                    </div>
+
+                    <!-- Video 5 (Optional - remove if you only want 3 total videos) -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <iframe
+                            src="https://player.vimeo.com/video/1157609188?background=1&autoplay=1&loop=1&muted=1&playsinline=1"
+                            frameborder="0" allow="autoplay; fullscreen" class="w-full aspect-video">
+                        </iframe>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-app.webp"
+                            alt="Project image 2 - Logo design variations" class="w-full h-auto object-contain">
+                    </div>
+
+                    <!-- Image -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-app-screens.webp"
+                            alt="Project image 2 - Logo design variations" class="w-full h-auto object-contain">
+                    </div>
+
+                    <!-- Image -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-construction-iphone-mockup.webp"
+                            alt="Project image 2 - Logo design variations" class="w-full h-auto object-contain">
+                    </div>
+
+                    <!-- Image -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-construction-screen.webp"
+                            alt="Project image 2 - Logo design variations" class="w-full h-auto object-contain">
+                    </div>
+
+                    <!-- Video 5 (Optional - remove if you only want 3 total videos) -->
+                    <div class="w-full rounded-lg overflow-hidden bg-black">
+                        <iframe
+                            src="https://player.vimeo.com/video/1157610130?background=1&autoplay=1&loop=1&muted=1&playsinline=1"
+                            frameborder="0" allow="autoplay; fullscreen" class="w-full aspect-video">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="w-full rounded-lg overflow-hidden bg-black">
+                    <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-mockup.webp"
+                        alt="Project image 2 - Logo design variations" class="w-full h-auto object-contain">
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FEATURING SECTION -->
+        <section class="py-20 md:py-32/2 bg-white" data-color="light">
+            <div class="max-w-[1920px] mx-auto px-6 md:px-[60px]">
+                <div class="reveal-wrap mb-8">
+                    <h3 class="reveal-item text-sm font-bold uppercase tracking-[0.3em] text-accent">The Result</h3>
+                </div>
+
+                <div class="reveal-wrap max-w-3xl">
+                    <div class="reveal-item prose prose-lg">
+                        <p class="text-xl md:text-2xl leading-relaxed mb-6">
+                            Our modern visual system for Jan de Installatieman optimizes brand recognition across
+                            vehicles, uniforms, and digital platforms in the Dutch market. By implementing a structured
+                            typography and color palette, we ensure a consistent and professional positioning that
+                            stands out in the competitive Netherlands installation sector.
+                        </p>
+                        <p class="text-xl md:text-2xl text-gray-600 leading-relaxed mb-6">
+                            Elevate your construction brand with a professional identity designed for reliability.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADD MORE IMAGE SECTIONS AS NEEDED -->
+        <!-- Just copy and paste this section block:
+        <section class="img-parallax-wrap" data-color="light">
+            <img src="YOUR_IMAGE_URL" alt="Description" class="parallax-img">
+        </section>
+        -->
+
+        <!-- CREDITS SECTION -->
+        <!-- CUSTOMIZE: Team credits -->
+        <section class="py-20 md:py-32 bg-white" data-color="light">
+            <div class="max-w-[1920px] mx-auto px-6 md:px-[60px]">
+                <div class="split-divider mb-12"></div>
+                <div class="flex justify-start">
+                    <div></div>
+                    <div class="flex flex-col gap-2 max-w-md">
+                        <div class="reveal-wrap">
+                            <h3 class="reveal-item text-2xl font-bold mb-4">Credits</h3>
+                        </div>
+                        <div class="reveal-wrap">
+                            <p class="reveal-item text-lg">
+                                <span class="font-bold">Agency:</span> Digitl sky
+                            </p>
+                            <p class="reveal-item text-lg">
+                                <span class="font-bold">Design & Direction:</span> SouthFlock
+                            </p>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- PROJECT NAVIGATION SECTION -->
+        <section class="w-full py-20 md:py-32 bg-[#0e0e0e] text-white border-t border-white/10" data-color="light">
+            <div class="w-full mx-auto px-6 md:px-[60px]">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8 items-center">
+                    <!-- Contact Button -->
+                    <a href="contact.html" class="group flex flex-col gap-2 text-left">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-[0.4em] opacity-40 group-hover:opacity-100 transition-opacity pt-2">
+                            Get in Touch
+                        </span>
+                        <h2
+                            class="text-xl md:text-3xl font-medium opacity-60 group-hover:opacity-100 group-hover:text-accent transition-all duration-300 uppercase">
+                            Let's Talk
+                        </h2>
+                    </a>
+
+                    <!-- All Projects -->
+                    <div class="hidden md:flex justify-center">
+                        <a href="/#work" class="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center 
+                              hover:bg-white hover:text-black hover:border-white hover:scale-110 
+                              transition-all duration-300 group">
+                            <span class="text-[10px] uppercase font-bold tracking-widest">All</span>
+                        </a>
+                    </div>
+
+                    <!-- Next Project with Hover Image -->
+                    <a href="comingsoon.html"
+                        class="group flex flex-col gap-2 text-right items-end relative overflow-hidden">
+                        <!-- Background Image on Hover -->
+                        <div
+                            class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none">
+
+                        </div>
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-[0.4em] opacity-40 group-hover:opacity-100 transition-opacity pt-2 relative z-10">
+                            View
+                        </span>
+                        <h2
+                            class="text-xl md:text-3xl font-medium opacity-60 group-hover:opacity-100 transition-opacity group-hover:text-accent duration-300 uppercase relative z-10">
+                            Next Project
+                        </h2>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-10 bg-black text-white/60 border-t border-white/10">
+        <div class="flex justify-between text-sm font-medium">
+            <div class="flex gap-5">
+                <span class="font-bold text-white">SouthFlock</span>
+                <span>© 2026</span>
+            </div>
+            <div class="flex gap-5">
+                <a href="https://www.instagram.com/southflock.studio/"
+                    class="hover:text-white transition-colors">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        let player;
+
+
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('seamless-player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'y6OEY5Vcvkg',
+                playerVars: {
+                    'autoplay': 1,
+                    'mute': 1,
+                    'controls': 0,
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'showinfo': 0,
+                    'iv_load_policy': 3,
+                    'playsinline': 1,
+                    'enablejsapi': 1,
+                    'origin': window.location.origin // Crucial for local servers
+                },
+                events: {
+                    'onReady': (event) => {
+                        event.target.mute();
+                        event.target.playVideo();
+                    },
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+        // 3. The secret sauce: Jump back to 0 before the "Black Screen" happens
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                const duration = player.getDuration();
+
+                // Check the time every 100ms
+                const checkLoop = setInterval(() => {
+                    const currentTime = player.getCurrentTime();
+                    // Jump back 0.2 seconds before the end to avoid the black flash
+                    if (currentTime > duration - 0.2) {
+                        player.seekTo(0);
+                    }
+
+                    // Clear interval if video stops
+                    if (player.getPlayerState() !== 1) clearInterval(checkLoop);
+                }, 100);
+            }
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Custom Cursor
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, dotX = 0, dotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        const animateCursor = () => {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            dotX += (mouseX - dotX) * 0.4;
+            dotY += (mouseY - dotY) * 0.4;
+
+            gsap.set(cursorRing, { x: ringX - 20, y: ringY - 20 });
+            gsap.set(cursorDot, { x: dotX - 4, y: dotY - 4 });
+
+            requestAnimationFrame(animateCursor);
+        };
+        animateCursor();
+
+        // Cursor hover states
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(cursorRing, { scale: 1.2, duration: 0.3 });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(cursorRing, { scale: 1, duration: 0.3 });
+            });
+        });
+
+        const wrapper = document.getElementById('video-wrapper');
+        const overlay = document.getElementById('play-overlay');
+        const iframe = document.getElementById('yt-player');
+
+        overlay.addEventListener('click', () => {
+            // 1. Hide the overlay
+            overlay.style.display = 'none';
+
+            // 2. Play the video (requires YouTube JS API)
+            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+
+            // 3. Request Fullscreen
+            if (wrapper.requestFullscreen) {
+                wrapper.requestFullscreen();
+            } else if (wrapper.webkitRequestFullscreen) { /* Safari */
+                wrapper.webkitRequestFullscreen();
+            } else if (wrapper.msRequestFullscreen) { /* IE11 */
+                wrapper.msRequestFullscreen();
+            }
+        });
+
+        // Hero reveal animations
+        gsap.to(".hero-container .reveal-item", {
+            y: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "expo.out",
+            delay: 0.5
+        });
+
+        // Generic reveal animations
+        gsap.utils.toArray("section:not(.hero-container) .reveal-item").forEach(item => {
+            gsap.to(item, {
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 85%"
+                }
+            });
+        });
+
+        // Split divider animation
+        gsap.utils.toArray(".split-divider").forEach(divider => {
+            gsap.to(divider, {
+                scaleX: 1,
+                duration: 1.5,
+                ease: "expo.out",
+                scrollTrigger: {
+                    trigger: divider,
+                    start: "top 80%"
+                }
+            });
+        });
+
+        // Parallax images
+        gsap.utils.toArray(".parallax-img").forEach(img => {
+            gsap.to(img, {
+                yPercent: 30,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: img.closest('.img-parallax-wrap'),
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

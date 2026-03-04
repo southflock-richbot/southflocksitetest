@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Southflock | Ideas Built to Move</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Essential styles for the rotating rectangles */
+        .moving-rect {
+            position: absolute;
+            transform-origin: center center;
+            animation: rotate-and-shimmer linear infinite;
+            filter: blur(1.5px);
+            will-change: transform, opacity;
+        }
+
+        .ghost-rect {
+            border: 1px solid rgba(255, 86, 8, 0.938);
+            background: transparent !important;
+        }
+
+        @keyframes rotate-and-shimmer {
+            0% {
+                transform: rotate(0deg);
+                opacity: 0.1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: rotate(360deg);
+                opacity: 0.1;
+            }
+        }
+
+        /* Prevent scrollbars during animation */
+        body {
+            margin: 0;
+            background-color: #000000;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section
+        class="relative min-h-screen w-full bg-[#000000] text-white flex items-center justify-center overflow-hidden">
+
+        <div class="absolute inset-0 z-0 pointer-events-none">
+
+            <div class="moving-rect"
+                style="width: 180vw; height: 1px; top: 10%; left: -20%; animation-duration: 25s; background: linear-gradient(90deg, transparent, #1e40af, #3b82f6, transparent);">
+            </div>
+
+            <div class="moving-rect ghost-rect"
+                style="width: 70vw; height: 30vh; top: 30%; left: 15%; animation-duration: 40s; animation-direction: reverse;">
+            </div>
+
+            <div class="moving-rect"
+                style="width: 110vw; height: 1px; top: 60%; left: -5%; animation-duration: 18s; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);">
+            </div>
+
+            <div class="moving-rect ghost-rect"
+                style="width: 50vw; height: 50vh; bottom: 5%; right: 10%; animation-duration: 50s;"></div>
+
+        </div>
+
+        <div class="relative z-10 text-center px-6">
+            <h1 class="text-6xl md:text-9xl font-black tracking
+
+    <style>
+        .moving-rect {
+            position: absolute;
+            transform-origin: center center;
+            animation: rotate-and-shimmer linear infinite;
+            filter: blur(1px);
+            /* Softens the edges for a light-leak look */
+        }
+
+        .ghost-rect {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: transparent !important;
+        }
+
+        @keyframes rotate-and-shimmer {
+            0% {
+                transform: rotate(0deg);
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 0.6;
+                /* Pulses slightly as it rotates */
+            }
+
+            100% {
+                transform: rotate(360deg);
+                opacity: 0.2;
+            }
+        }
+
+        /* Optional: Add a slight parallax move based on mouse if you want to get fancy later */
+        .hero-container:hover .moving-rect {
+            animation-play-state: paused;
+            /* Interesting effect: hover to " freeze" time */ } </style>
+    </section>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Southflock | Motion Narrative</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            :root {
+                --bg-color: #000000;
+                --accent-blue: #3b82f6;
+            }
+
+            body {
+                background-color: var(--bg-color);
+                margin: 0;
+                overflow: hidden;
+            }
+
+            /* The Animation Container */
+            .stage {
+                perspective: 1000px;
+            }
+
+            /* ANIMATOR'S KEY: 
+           Using a "swing" motion instead of a 360 loop for a more cinematic feel 
+        */
+            @keyframes swing-rotate {
+                0% {
+                    transform: rotate(-15deg) scale(0.95);
+                    opacity: 0.1;
+                }
+
+                50% {
+                    transform: rotate(15deg) scale(1.05);
+                    opacity: 0.4;
+                }
+
+                100% {
+                    transform: rotate(-15deg) scale(0.95);
+                    opacity: 0.1;
+                }
+            }
+
+            @keyframes drift {
+                0% {
+                    transform: translate(0, 0);
+                }
+
+                50% {
+                    transform: translate(2%, 1%);
+                }
+
+                100% {
+                    transform: translate(0, 0);
+                }
+            }
+
+            .anim-rect {
+                position: absolute;
+                transform-origin: center center;
+                animation: swing-rotate var(--duration) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+                will-change: transform, opacity;
+            }
+
+            /* Depth of Field Classes */
+            .layer-foreground {
+                filter: blur(0px);
+                z-index: 3;
+            }
+
+            .layer-midground {
+                filter: blur(4px);
+                z-index: 2;
+            }
+
+            .layer-background {
+                filter: blur(12px);
+                z-index: 1;
+            }
+
+            /* The "Scanline" Texture */
+            .scanlines {
+                background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.5) 50%);
+                background-size: 100% 4px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <section
+            class="stage relative min-h-screen w-full bg-black text-white flex items-center justify-center overflow-hidden">
+
+            <div class="absolute inset-0 scanlines opacity-20 pointer-events-none z-50"></div>
+
+            <div class="absolute inset-0 pointer-events-none overflow-hidden">
+
+                <div class="anim

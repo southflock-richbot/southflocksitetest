@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | SouthFlock</title>
+
+    <link rel="icon" href="assets/img/brand/01SF_Favcon.svg" type="image/svg+xml">
+
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="assets/js/header.js" defer></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#f95202',
+                        'brand-blue': '#0033ff',
+                    },
+                    fontFamily: {
+                        'sans': ['Satoshi', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @font-face {
+            font-family: 'AV Estiana';
+            src: url('../Assets/fonts/AVEstiana-LightOblique.ttf') format('truetype');
+            font-weight: 300;
+            font-style: oblique;
+        }
+
+        .av-estiana {
+            font-family: 'AV Estiana', serif;
+        }
+
+        .reveal-wrap {
+            overflow: hidden;
+            display: block;
+        }
+
+        .reveal-item {
+            display: block;
+            transform: translateY(100%);
+        }
+
+        .section-padding {
+            padding: 100px 60px;
+        }
+
+        input,
+        textarea {
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #f95202;
+        }
+
+        .service-btn.active-service,
+        .budget-btn.active-budget {
+            border-color: #f95202;
+            background-color: rgba(249, 82, 2, 0.1);
+            color: #f95202;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-black font-sans antialiased overflow-x-hidden">
+
+    <sf-header></sf-header>
+
+
+    <section
+        class="relative min-h-screen w-full bg-black text-white flex items-center justify-start px-6 md:px-[60px] pt-32 overflow-hidden"
+        data-color="dark">
+
+        <div class="absolute inset-0 z-0">
+            <img src="assets/img/brand/southflock-brand-identity-mockup.webp" alt="Background"
+                class="w-full h-full object-cover opacity-50">
+        </div>
+
+        <div class="max-w-[1400px] w-full relative z-10">
+            <div class="reveal-wrap mb-8">
+                <span class="text-sm font-bold uppercase text-gray-300 tracking-[0.2em] reveal-item">Get in Touch</span>
+            </div>
+            <div class="reveal-wrap">
+                <h1
+                    class="text-[clamp(42px,8vw,120px)] font-bold leading-[0.9] md:leading-[.8] tracking-tighter reveal-item mb-12">
+                    Let's build something <span class="font-light av-estiana">amazing</span> together
+                </h1>
+            </div>
+            <div class="reveal-wrap">
+                <p class="text-[clamp(20px,2.5vw,32px)] leading-[1.2] text-gray-200 max-w-[900px] reveal-item">
+                    Whether you have a project in mind or just want to chat about possibilities, we'd love to hear from
+                    you.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding bg-white" data-color="light">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+                <div class="reveal-wrap">
+                    <h2 class="reveal-item text-4xl md:text-5xl font-medium leading-tight">
+                        Let's get to work.
+                    </h2>
+                </div>
+                <div class="reveal-wrap">
+                    <p class="reveal-item text-xl md:text-2xl leading-relaxed text-gray-800">
+                        Whether it’s a product launch, brand system, or custom
+                        animation, get in touch and let’s build something that moves your brand forward.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding bg-white pt-0" data-color="light">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="reveal-wrap mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold reveal-item">Send us a message</h2>
+            </div>
+
+            <form class="space-y-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="reveal-wrap">
+                        <div class="reveal-item">
+                            <label class="block text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Name
+                                *</label>
+                            <input type="text" required
+                                class="w-full px-0 py-4 border-b-2 border-gray-200 text-2xl focus:border-black transition-colors bg-transparent placeholder-gray-300"
+                                placeholder="Enter your name...">
+                        </div>
+                    </div>
+                    <div class="reveal-wrap">
+                        <div class="reveal-item">
+                            <label class="block text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Email
+                                *</label>
+                            <input type="email" required
+                                class="w-full px-0 py-4 border-b-2 border-gray-200 text-2xl focus:border-black transition-colors bg-transparent placeholder-gray-300"
+                                placeholder="Enter your email...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-wrap">
+                    <div class="reveal-item">
+                        <label
+                            class="block text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Company</label>
+                        <input type="text"
+                            class="w-full px-0 py-4 border-b-2 border-gray-200 text-2xl focus:border-black transition-colors bg-transparent placeholder-gray-300"
+                            placeholder="Enter your company name...">
+                    </div>
+                </div>
+
+                <div class="reveal-wrap">
+                    <div class="reveal-item">
+                        <label class="block text-sm font-bold uppercase tracking-wider text-gray-400 mb-6">Service
+                            Interest *</label>
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button"
+                                class="service-btn px-6 py-3 border border-gray-200 rounded-full text-sm font-medium active-service"
+                                data-service="Animation">Animation</button>
+                            <button type="button"
+                                class="service-btn px-6 py-3 border border-gray-200 rounded-full text-sm font-medium"
+                                data-service="Branding">Branding</button>
+                            <button type="button"
+                                class="service-btn px-6 py-3 border border-gray-200 rounded-full text-sm font-medium"
+                                data-service="Web Design">Web Design</button>
+                            <button type="button"
+                                class="service-btn px-6 py-3 border border-gray-200 rounded-full text-sm font-medium"
+                                data-service="Content Creation">Content Creation</button>
+                            <button type="button"
+                                class="service-btn px-6 py-3 border border-gray-200 rounded-full text-sm font-medium"
+                                data-service="Multiple Services">Multiple Services</button>
+                        </div>
+                        <input type="hidden" id="selectedService" name="service" value="Animation" required>
+                    </div>
+                </div>
+
+                <div class="reveal-wrap">
+                    <div class="reveal-item">
+                        <label class="block text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Message
+                            *</label>
+                        <textarea required rows="4"
+                            class="w-full px-0 py-4 border-b-2 border-gray-200 text-xl focus:border-black transition-colors bg-transparent placeholder-gray-300 resize-none"
+                            placeholder="Tell us about your project..."></textarea>
+                    </div>
+                </div>
+
+                <div class="hidden" aria-hidden="true">
+                    <label for="honeypot">Leave this field empty</label>
+                    <input type="text" name="honeypot" id="honeypot" tabindex="-1" autocomplete="off">
+                </div>
+
+                <div class="reveal-wrap mb-8">
+                    <div class="reveal-item">
+                        <label class="block text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Security
+                            Check *</label>
+                        <div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                            <div class="relative select-none">
+                                <canvas id="captchaCanvas" width="200" height="60"
+                                    class="bg-gray-50 rounded border border-gray-200 cursor-pointer hover:border-gray-400 transition-colors"
+                                    title="Click to refresh"></canvas>
+                            </div>
+                            <input type="text" id="captchaInput" required
+                                class="w-full md:w-48 px-0 py-4 border-b-2 border-gray-200 text-xl focus:border-black transition-colors bg-transparent placeholder-gray-300 uppercase"
+                                placeholder="Enter code">
+                            <button type="button" id="refreshCaptcha"
+                                class="text-sm font-bold uppercase tracking-wider text-gray-400 hover:text-black transition-colors">Refresh</button>
+                        </div>
+                        <p id="captchaError" class="text-accent text-sm mt-2 hidden font-medium">Incorrect code. Please
+                            try again.</p>
+                    </div>
+                </div>
+
+                <div class="reveal-wrap pt-8">
+                    <div class="reveal-item">
+                        <button type="submit"
+                            class="w-full md:w-auto bg-black text-white px-16 py-6 text-xl font-bold rounded-full hover:bg-accent transition-all duration-300 hover:scale-105">
+                            Send Message
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="w-full h-px bg-gray-200 my-20"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                <div>
+                    <div class="reveal-wrap mb-6">
+                        <h3 class="reveal-item text-xs font-bold uppercase tracking-widest text-gray-400">Email Us</h3>
+                    </div>
+                    <div class="reveal-wrap">
+                        <a href="mailto:info@southflock.com"
+                            class="reveal-item text-xl md:text-2xl font-medium hover:text-accent transition-colors block">
+                            info@southflock.com
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="reveal-wrap mb-6">
+                        <h3 class="reveal-item text-xs font-bold uppercase tracking-widest text-gray-400">Follow Us</h3>
+                    </div>
+                    <div class="reveal-wrap">
+                        <div class="reveal-item flex flex-col gap-3">
+                            <a href="https://www.instagram.com/southflock.studio/"
+                                class="group flex items-center gap-3 text-xl hover:text-accent transition-colors">
+                                <span>Instagram</span>
+                                <span
+                                    class="text-xs border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center group-hover:bg-accent group-hover:text-white">↗</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="reveal-wrap mb-6">
+                        <h3 class="reveal-item text-xs font-bold uppercase tracking-widest text-gray-400">Office</h3>
+                    </div>
+                    <div class="reveal-wrap">
+                        <p class="reveal-item text-lg leading-relaxed mb-4">
+                            South Africa<br> Cape Town, 8001
+                        </p>
+                        <p class="reveal-item text-gray-500 text-base">Mon - Fri: 9:00 - 17:00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="p-10 bg-black text-white/60 border-t border-white/10">
+        <div class="flex justify-between text-sm font-medium">
+            <div class="flex gap-5">
+                <span class="font-bold text-white">SouthFlock</span>
+                <span>© 2026</span>
+            </div>
+            <div class="flex gap-5">
+                <a href="https://www.instagram.com/southflock.studio/"
+                    class="hover:text-white transition-colors">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+
+
+        // Reveal Animations
+        const revealWraps = document.querySelectorAll('.reveal-wrap');
+        revealWraps.forEach((wrap) => {
+            const item = wrap.querySelector('.reveal-item');
+            if (item) {
+                gsap.to(item, {
+                    y: 0,
+                    duration: 1.5,
+                    ease: "expo.out",
+                    scrollTrigger: {
+                        trigger: wrap,
+                        start: "top 90%",
+                    }
+                });
+            }
+        });
+
+
+
+        // Handle buttons
+        function setupToggleButtons(btnClass, hiddenInputId, activeClass) {
+            document.querySelectorAll(btnClass).forEach(btn => {
+                btn.addEventListener('click', function () {
+                    document.querySelectorAll(btnClass).forEach(b => b.classList.remove(activeClass));
+                    this.classList.add(activeClass);
+                    document.getElementById(hiddenInputId).value = this.getAttribute('data-' + btnClass.split('-')[0].substring(1));
+                });
+            });
+        }
+        setupToggleButtons('.service-btn', 'selectedService', 'active-service');
+        setupToggleButtons('.budget-btn', 'selectedBudget', 'active-budget');
+
+        // Captcha System
+        const captchaCanvas = document.getElementById('captchaCanvas');
+        const captchaInput = document.getElementById('captchaInput');
+        const refreshBtn = document.getElementById('refreshCaptcha');
+        const captchaError = document.getElementById('captchaError');
+        let captchaCode = '';
+
+        function generateCaptcha() {
+            const ctx = captchaCanvas.getContext('2d');
+            ctx.clearRect(0, 0, captchaCanvas.width, captchaCanvas.height);
+
+            // Background
+            ctx.fillStyle = '#f9fafb';
+            ctx.fillRect(0, 0, captchaCanvas.width, captchaCanvas.height);
+
+            // Random Code Generation
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            captchaCode = code;
+
+            // Draw Text
+            ctx.font = 'bold 32px "Satoshi", sans-serif';
+            ctx.fillStyle = '#1a1a1a';
+            ctx.textBaseline = 'middle';
+
+            // Draw characters with randomization
+            const startX = 25;
+            const letterSpacing = 28;
+
+            for (let i = 0; i < code.length; i++) {
+                ctx.save();
+                ctx.translate(startX + (i * letterSpacing), 30);
+                ctx.rotate((Math.random() - 0.5) * 0.3);
+                ctx.fillText(code[i], 0, 0);
+                ctx.restore();
+            }
+
+            // Add interference lines
+            for (let i = 0; i < 7; i++) {
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * captchaCanvas.width, Math.random() * captchaCanvas.height);
+                ctx.lineTo(Math.random() * captchaCanvas.width, Math.random() * captchaCanvas.height);
+                ctx.strokeStyle = `rgba(0,0,0,${0.1 + Math.random() * 0.1})`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+
+            // Reset input and error
+            captchaInput.value = '';
+            captchaError.classList.add('hidden');
+            captchaInput.classList.remove('border-accent');
+            captchaInput.classList.add('border-gray-200');
+        }
+
+        // Captcha Event Listeners
+        refreshBtn.addEventListener('click', generateCaptcha);
+        captchaCanvas.addEventListener('click', generateCaptcha);
+
+        // Initialize Captcha
+        generateCaptcha();
+
+        // Consolidated Form Submit
+        const contactForm = document.querySelector('form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // 1. Honeypot Check
+            const honeypot = document.getElementById('honeypot').value;
+            if (honeypot) {
+                console.warn("Spam detected.");
+                return;
+            }
+
+            // 2. Captcha Validation
+            if (captchaInput.value.toUpperCase() !== captchaCode) {
+                captchaError.classList.remove('hidden');
+                captchaInput.classList.remove('border-gray-200');
+                captchaInput.classList.add('border-accent');
+
+                // Shake animation for visual feedback
+                gsap.fromTo(captchaInput,
+                    { x: -10 },
+                    {
+                        x: 10, duration: 0.1, repeat: 5, yoyo: true, ease: "power1.inOut", onComplete: () => {
+                            gsap.set(captchaInput, { x: 0 });
+                        }
+                    }
+                );
+                return;
+            }
+
+            // 3. Success
+            captchaError.classList.add('hidden');
+            alert('Message Sent Successfully!');
+            e.target.reset();
+            generateCaptcha(); // Refresh for next submission
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon | SouthFlock</title>
+
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'accent': '#f95202', 'dark': '#0e0e0e' },
+                    fontFamily: { 'sans': ['Satoshi', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg: #0e0e0e;
+            --accent: #f95202;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            overflow: hidden;
+            cursor: none !important;
+        }
+
+        /* Custom Cursor from your FZ file */
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+
+        #cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid white;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        /* Blurred Animated Background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0e0e0e 100%);
+            z-index: -1;
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            filter: blur(120px);
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        /* Add this as an overlay to your background */
+        .bg-gradient::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            /* Very subtle */
+            pointer-events: none;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+        }
+
+        .reveal-wrap {
+            overflow: hidden;
+        }
+
+        .reveal-item {
+            transform: translateY(100%);
+        }
+
+        /* Back Button Styles */
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-text {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            opacity: 0.5;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-arrow-wrapp {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .back-circle-scale {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 0;
+        }
+
+        .back-arrow-svg {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            z-index: 1;
+            transition: color 0.4s ease, transform 0.4s ease;
+        }
+
+        /* Hover States */
+        .back-btn:hover .back-circle-scale {
+            transform: scale(1);
+        }
+
+        .back-btn:hover .back-arrow-svg {
+            color: #0e0e0e;
+            transform: translateX(-2px);
+        }
+
+        .back-btn:hover .back-text {
+            opacity: 1;
+            transform: translateX(4px);
+        }
+
+        :root {
+            --bg-color: #0e0e0e;
+            --accent-orange: #f95202;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* The Main Gradient */
+        .gradient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            /* This creates a soft glow coming from the bottom right */
+            background: radial-gradient(circle at 50% 350%,
+                    rgb(249, 80, 2) 5%,
+                    rgb(0, 0, 0) 80%);
+        }
+
+        /* Subtle secondary glow for depth */
+        .gradient-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 10% 10%,
+                    rgba(249, 82, 2, 0.05) 0%,
+                    transparent 20%);
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased">
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <div class="bg-gradient"></div>
+    <div class="blob" id="blob1"></div>
+    <div class="blob" id="blob2"></div>
+
+
+    <main class="h-screen w-full flex flex-col items-center justify-center px-6 relative z-[100]">
+        <div class="reveal-wrap mb-12">
+            <span class="reveal-item block text-[10px] font-bold uppercase tracking-[0.5em] text-white/40">SouthFlock
+                Studio</span>
+        </div>
+        <div class="gradient-bg"></div>
+        <div class="grain-overlay"></div>
+        <div class="text-center">
+            <div class="reveal-wrap">
+                <h1 class="reveal-item text-5xl md:text-7xl font-bold uppercase tracking-tighter leading-none">
+                    Coming <span class="text-accent italic pr-4">Soon</span>
+                </h1>
+            </div>
+            <div class="reveal-wrap mt-4">
+                <p class="reveal-item text-white/60 text-sm md:text-lg tracking-wide font-light max-w-md mx-auto">
+                    We are currently crafting a new digital experience.
+                </p>
+            </div>
+        </div>
+
+        <div class="absolute bottom-12 reveal-wrap">
+            <a href="https://www.instagram.com/southflock.studio/"
+                class="reveal-item block text-[10px] font-bold uppercase tracking-[0.3em] hover:text-accent transition-colors duration-300">
+                Instagram — @southflock.studio
+            </a>
+        </div>
+        <div class="absolute top-12 left-6 md:left-12">
+            <a href="/index.html#work" class="back-btn group">
+                <div class="back-arrow-wrapp">
+                    <div class="back-circle-scale"></div>
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="back-arrow-svg">
+                        <path d="M15.8333 10H4.16663M4.16663 10L9.16663 15M4.16663 10L9.16663 5" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <span class="back-text">Back to Project</span>
+            </a>
+        </div>
+
+    </main>
+
+    <script>
+        // Cursor Logic (Directly from your file)
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, dotX = 0, dotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+        });
+
+        const animateCursor = () => {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            dotX += (mouseX - dotX) * 0.4;
+            dotY += (mouseY - dotY) * 0.4;
+            gsap.set(cursorRing, { x: ringX - 20, y: ringY - 20 });
+            gsap.set(cursorDot, { x: dotX - 4, y: dotY - 4 });
+            requestAnimationFrame(animateCursor);
+        };
+        animateCursor();
+
+        // Reveal Animations
+        window.onload = () => {
+            gsap.to(".reveal-item", {
+                y: 0,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: "expo.out",
+                delay: 0.5
+            });
+
+            // Subtle background blob movement
+            gsap.to("#blob1", {
+                x: "20vw", y: "10vh", duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut"
+            });
+            gsap.to("#blob2", {
+                x: "-15vw", y: "-20vh", duration: 12, repeat: -1, yoyo: true, ease: "sine.inOut", delay: 1
+            });
+        };
+    </script>
+</body>
+
+</html>

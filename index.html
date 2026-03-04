@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SouthFlock | Identity & Motion</title>
+    <meta name="description"
+        content="SouthFlock → A boutique Animation and Branding studio building towards the future.">
+
+    <link rel="icon" href="assets/img/brand/01SF_Favcon.svg" type="image/svg+xml">
+
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="assets/js/header.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#ff5b00',
+                        'brand-blue': '#0033ff',
+                        'gray-med': '#e0e0e0',
+                        'gray-dark': '#666',
+                        'black-main': '#050505',
+                    },
+                    fontFamily: {
+                        'sans': ['Satoshi', 'Inter', 'sans-serif'],
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        spinStar: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.4' },
+                        },
+                        pan: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '30%': { transform: 'translateX(0%)' },   /* Pause on Image 1 */
+                            '33%': { transform: 'translateX(-33.33%)' }, /* Slide to 2 */
+                            '63%': { transform: 'translateX(-33.33%)' }, /* Pause on Image 2 */
+                            '66%': { transform: 'translateX(-66.66%)' }, /* Slide to 3 */
+                            '96%': { transform: 'translateX(-66.66%)' }, /* Pause on Image 3 */
+                            '100%': { transform: 'translateX(0%)' }    /* Reset to start */
+                        },
+                        progress: {
+                            '0%': { transform: 'scaleX(0)' },
+                            '100%': { transform: 'scaleX(1)' }
+                        }
+                    },
+                    animation: {
+                        marquee: 'marquee 30s linear infinite',
+                        spinStar: 'spinStar 10s linear infinite',
+                        blink: 'blink 2s infinite',
+                        'pan-images': 'pan 15s ease-in-out infinite',
+                        progress: 'progress 5s linear infinite',
+                    },
+                    maxWidth: {
+                        'container': '1400px',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        .outline-text {
+            -webkit-text-stroke: 2px white;
+            color: transparent;
+            transition: color 0.3s;
+        }
+
+
+        html,
+        body,
+        a,
+        button,
+        input,
+        textarea,
+        select,
+        [role="button"] {
+            cursor: none !important;
+            /* Hide default cursor everywhere */
+        }
+
+        /* Custom Cursor */
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            /* Default to white for difference blending */
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            /* User interaction must pass through */
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+
+        #cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid white;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            /* User interaction must pass through */
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s, background 0.3s, border 0.3s;
+            mix-blend-mode: difference;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            text-transform: uppercase;
+            overflow: hidden;
+            white-space: nowrap;
+
+        }
+
+        /* Container for both effects */
+        .cinematic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Bottom blur effect */
+        .bottom-blur {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8%;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+        }
+
+        /* Animated film grain overlay */
+        .grain-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+            animation: grain-wiggle 0s steps(10) infinite;
+        }
+
+        /* The "film flicker" animation */
+        @keyframes grain-wiggle {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            10% {
+                transform: translate(-5%, -5%);
+            }
+
+            20% {
+                transform: translate(-10%, 5%);
+            }
+
+            30% {
+                transform: translate(5%, -10%);
+            }
+
+            40% {
+                transform: translate(-5%, 15%);
+            }
+
+            50% {
+                transform: translate(-10%, 5%);
+            }
+
+            60% {
+                transform: translate(15%, 0%);
+            }
+
+            70% {
+                transform: translate(0%, 10%);
+            }
+
+            80% {
+                transform: translate(-15%, 0%);
+            }
+
+            90% {
+                transform: translate(10%, 5%);
+            }
+        }
+
+        .pixel-box.active {
+            background: var(--dark);
+        }
+
+
+        /* Reveal Animation Styles */
+        .reveal-wrap {
+            overflow: hidden;
+            display: block;
+        }
+
+        .reveal-item {
+            display: block;
+            transform: translateY(100%);
+            /* Start hidden/pushed down */
+        }
+
+        /* Section Padding */
+        .section-padding {
+            padding: 120px 60px;
+        }
+
+        /* Split Divider */
+        .split-divider {
+            width: 100%;
+            height: 1px;
+            background: black;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        /* Double Arrow Link */
+        .double-arrow-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .arrow-icon {
+            font-size: 20px;
+            line-height: 1;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .double-arrow-link:hover .arrow-icon:first-child {
+            transform: translate(2px, -2px);
+        }
+
+        /* Service Item Scroll-In Animation */
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .service-item-reveal.visible {
+            animation: slideInUp 0.8s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 80px 20px;
+            }
+
+            #cursor-dot,
+            #cursor-ring {
+                display: none;
+            }
+
+            body,
+            a,
+            button,
+            input,
+            textarea,
+            select,
+            [role="button"] {
+                cursor: auto !important;
+            }
+        }
+
+        /* --- New Services: Video Grid & Hover --- */
+        .services-section {
+            min-height: 100vh;
+            padding: 80px 60px;
+            position: relative;
+        }
+
+        .section-header {
+            max-width: 1400px;
+            margin: 0 00px;
+        }
+
+        .section-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Video Grid Background */
+        .video-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .video-grid.active {
+            opacity: 1;
+        }
+
+        .video-cell {
+            position: relative;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .video-cell video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .video-cell.active video {
+            opacity: 0.6;
+        }
+
+        /* Service Items */
+        .service-list {
+            position: relative;
+            z-index: 10;
+        }
+
+        .service-item {
+            padding: 60px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .service-item:first-child {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-title {
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            opacity: 0.3;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .service-number {
+            font-size: clamp(16px, 2vw, 24px);
+            font-weight: 400;
+            font-family: 'Courier New', monospace;
+            opacity: 0.5;
+        }
+
+        .service-item:hover .service-title {
+            opacity: 1;
+            transform: translateX(20px);
+        }
+
+        .service-item.active .service-title {
+            opacity: 1;
+        }
+
+        /* Video Preview on Hover */
+        .video-preview {
+            position: fixed;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 350px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 20;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-preview.active {
+            opacity: 1;
+        }
+
+        .video-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 1024px) {
+            .video-preview {
+                display: none;
+            }
+
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .services-section {
+                padding: 60px 20px;
+            }
+
+            .service-item {
+                padding: 40px 0;
+            }
+
+            .service-title {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+        }
+
+        body {
+            cursor: auto;
+        }
+    </style>
+
+    <!-- Services Section with Video Hover Effects -->
+    <style>
+        .services-section {
+            min-height: 100vh;
+            padding: 80px 60px;
+            position: relative;
+            background: #000;
+            color: #fff;
+        }
+
+        .services-section .section-header {
+            max-width: 1400px;
+            margin: 0 auto 60px;
+        }
+
+        .services-section .section-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .services-section .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .services-section .video-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .services-section .video-cell {
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .services-section .video-cell.active {
+            opacity: 1;
+        }
+
+        .services-section .video-cell video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+
+        .services-section .service-list {
+            position: relative;
+            z-index: 10;
+        }
+
+        .services-section .service-item {
+            padding: 60px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .services-section .service-item:first-child {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .services-section .service-title {
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            opacity: 0.3;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .services-section .service-item:hover .service-title {
+            opacity: 1;
+            transform: translateX(20px);
+        }
+
+        .services-section .service-item.active .service-title {
+            opacity: 1;
+        }
+
+        .services-section .service-description {
+            font-size: 18px;
+            color: #999;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            margin-left: clamp(40px, 5vw, 60px);
+            /* Align with title text */
+            transform: translateY(-10px);
+            font-weight: 300;
+        }
+
+        .services-section .service-item:hover .service-description {
+            max-height: 80px;
+            opacity: 1;
+            margin-top: 15px;
+            transform: translateY(0);
+        }
+
+        .services-section .video-preview {
+            position: fixed;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 350px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 20;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .services-section .video-preview.active {
+            opacity: 1;
+        }
+
+        .services-section .video-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 1024px) {
+            .services-section .video-preview {
+                display: none;
+            }
+
+            .services-section .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .services-section {
+                padding: 60px 20px;
+            }
+
+            .services-section .service-item {
+                padding: 40px 0;
+            }
+
+            .services-section .service-title {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+        }
+
+        /* Projects Grid Section with Scrolling Hover Text */
+        .projects-grid-section {
+            padding: 80px 0px;
+            background: #000;
+            color: #fff;
+        }
+
+        .projects-grid-section .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        @media (min-width: 768px) {
+            .projects-grid-section .container {
+                padding: 0 60px;
+            }
+        }
+
+        .projects-grid-section .section-header {
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .projects-grid-section .section-header {
+                margin-bottom: 80px;
+            }
+        }
+
+        .projects-grid-section .section-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .projects-grid-section .section-title {
+            font-size: clamp(48px, 6vw, 72px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Grid Layout */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 80px;
+            /* Vertical gap between rows */
+            column-gap: 60px;
+            /* Horizontal gap between columns */
+            margin-bottom: 90px;
+        }
+
+        @media (min-width: 768px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Project Card */
+        .project-card {
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+
+        }
+
+        .project-image-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Overlay */
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            transition: background 0.4s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover .project-overlay {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Scrolling Text Hover */
+        .project-hover-track {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover .project-hover-track {
+            opacity: 1;
+            animation: scrollText 20s linear infinite;
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateY(-50%) translateX(0%);
+            }
+
+            100% {
+                transform: translateY(-50%) translateX(-50%);
+            }
+        }
+
+        .track-text {
+            font-size: clamp(24px, 3vw, 36px);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+            flex-shrink: 0;
+        }
+
+        .track-divider {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Project Info */
+        .project-info {
+            padding: 0 0px;
+            text-align: left;
+        }
+
+        @media (min-width: 768px) {
+            .project-info {
+                padding: 0 20px;
+            }
+        }
+
+        .project-name {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: -5px;
+            letter-spacing: -0.01em;
+        }
+
+        @media (min-width: 768px) {
+            .project-name {
+                font-size: 40px;
+                margin-bottom: -10px;
+            }
+        }
+
+        .project-name.title-span {
+            font-style: medium;
+            font-weight: 400;
+        }
+
+        .project-category {
+            font-size: 14px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        @media (min-width: 768px) {
+            .project-category {
+                font-size: 20px;
+            }
+        }
+
+        /* View All Button */
+        .btn-wrapper {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 32px;
+            background: transparent;
+            border: 2px solid #fff;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .view-all-btn svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .view-all-btn:hover svg {
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid-section {
+                padding: 60px 0;
+            }
+
+            .projects-grid {
+                gap: 40px;
+                grid-template-columns: 1fr;
+            }
+
+            .project-image-wrapper {
+                margin-bottom: 15px;
+            }
+
+            .track-text {
+                font-size: 50px;
+            }
+        }
+
+        .something {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+        }
+
+        /* Grid Section */
+        .image-grid-section {
+            padding: 130px 40px;
+            background: #000;
+        }
+
+        .grid-container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Grid Template Areas Layout */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto;
+            gap: 20px;
+            grid-template-areas:
+                "box-1 box-2 box-2 box-3"
+                "box-1 box-4 box-5 box-5"
+                "box-6 box-6 box-7 box-8"
+                "box-6 box-6 box-9 box-10";
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            min-height: 300px;
+        }
+
+        /* Assign each item to a named area */
+        .box-1 {
+            grid-area: box-1;
+        }
+
+        .box-2 {
+            grid-area: box-2;
+        }
+
+        .box-3 {
+            grid-area: box-3;
+        }
+
+        .box-4 {
+            grid-area: box-4;
+        }
+
+        .box-5 {
+            grid-area: box-5;
+        }
+
+        .box-6 {
+            grid-area: box-6;
+        }
+
+        .box-7 {
+            grid-area: box-7;
+        }
+
+        .box-8 {
+            grid-area: box-8;
+        }
+
+        .box-9 {
+            grid-area: box-9;
+        }
+
+        .box-10 {
+            grid-area: box-10;
+        }
+
+        /* Media */
+        .grid-item img,
+        .grid-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Tablet (768px - 1024px) */
+        @media (max-width: 1080px) {
+            .image-grid-section {
+                padding: 60px 30px;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+                gap: 15px;
+                grid-template-areas:
+                    "box-1 box-2"
+                    "box-3 box-4"
+                    "box-5 box-5"
+                    "box-6 box-6"
+                    "box-7 box-8"
+                    "box-9 box-10";
+            }
+
+            .grid-item {
+                min-height: 250px;
+            }
+        }
+
+        /* Mobile (below 768px) */
+        @media (max-width: 768px) {
+            .image-grid-section {
+                padding: 40px 15px;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+                gap: 12px;
+                grid-template-areas:
+                    "box-1 box-1"
+                    "box-2 box-3"
+                    "box-4 box-5"
+                    "box-6 box-6"
+                    "box-7 box-8"
+                    "box-9 box-10";
+            }
+
+            .grid-item {
+                min-height: 200px;
+            }
+
+            .mask-linear-fade {
+                mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            }
+
+            /* Add this to your main CSS file, not just the JS injection */
+            .pixel-tile {
+                transition: opacity 0.3s ease;
+            }
+
+            /* Use CSS to handle the staggering instead of 200 setTimeouts */
+            .pixel-tile:nth-child(1) {
+                transition-delay: 20ms;
+            }
+
+            .pixel-tile:nth-child(2) {
+                transition-delay: 40ms;
+            }
+
+            /* ... and so on ... */
+        }
+
+        /* SVG Filter Overlay for the noise/grain */
+        .moving-gradient::after {
+            content: "";
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.20;
+            /* Adjust for grain intensity */
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @keyframes moveGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+    <style>
+        /* Mobile Menu Styles */
+        @media (max-width: 768px) {
+
+            #cursor-dot,
+            #cursor-ring,
+            #cursor {
+                display: none !important;
+            }
+
+            body,
+            a,
+            button,
+            input {
+                cursor: auto !important;
+            }
+        }
+
+        /* Hamburger Animation */
+        #menu-toggle.menu-open span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        #menu-toggle.menu-open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        #menu-toggle.menu-open span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Add this class to your main content sections in HTML */
+        .reveal-content {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+
+        /* JavaScript will trigger this when the loader finishes */
+        .reveal-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="bg-white text-black font-sans antialiased overflow-x-hidden">
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+    <div id="cursor"></div>
+    <div id="cursor-blur"></div>
+    <script src="loader.js"></script>
+
+    <sf-header></sf-header>
+
+    <main>
+        <!-- "IDEAS BUILT TO MOVE" Hero Section -->
+        <section
+            class="min-h-[600px]  md:h-[800px] w-full bg-black-main text-white flex items-center justify-center px-0 pt-0 hero-container"
+            data-color="dark">
+
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                <div class="absolute inset-0 w-full h-full z-10 bg-black/80"></div>
+
+                <div class="absolute inset-0 w-full h-full overflow-hidden">
+                    <iframe
+                        src="https://player.vimeo.com/video/1157609188?background=1&autoplay=1&loop=1&muted=1&playsinline=1"
+                        frameborder="0" allow="autoplay; fullscreen"
+                        class="absolute top-1/2 left-1/2 w-[177.77vh] min-w-full min-h-full h-[56.25vw] -translate-x-1/2 -translate-y-1/2 object-cover">
+                    </iframe>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col items-start md:items-center gap-0 w-full max-w-container px-4 md:px-0">
+                <!-- Row 1: IDEAS (mobile) / Arrow + IDEAS (desktop) -->
+                <div class="flex items-center md:items-center gap-0 w-full justify-start flex-wrap lg:flex-nowrap">
+                    <div class="w-[60px] h-[60px]  md:w-[220px] md:h-[220px] lg:block reveal-wrap">
+                        <img src="assets/img/brand/southflock-logo-icon.svg" alt="Arrow Icon"
+                            class="w-full h-full reveal-item">
+                    </div>
+                    <div class="reveal-wrap w-full md:w-auto">
+                        <h1
+                            class="text-[clamp(48px,15vw,200px)] font-bold leading-[0.85] text-left md:text-center tracking-tighter shrink-0 reveal-item">
+                            IDEAS</h1>
+                    </div>
+                    <!-- Description hidden on mobile, shown on desktop in original position -->
+                    <div class="reveal-wrap w-full md:w-auto hidden md:block">
+                        <p
+                            class="max-w-[600px] text-[16px] md:text-[22px] leading-snug text-[#ccc] font-medium ml-0 md:ml-5 text-left mt-5 lg:mt-0 reveal-item">
+                            SouthFlock → Building the moves that move your business. We help tech-driven brands
+                            scale faster through high-end animation - bridging the gap between strategic branding
+                            and motion design.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Row 2: BUILT TO -->
+                <div class="flex justify-start md:justify-center w-full">
+                    <div class="reveal-wrap">
+                        <h1
+                            class="text-[clamp(48px,15vw,200px)] font-bold leading-[0.85] uppercase tracking-tighter shrink-0 reveal-item text-left md:text-center">
+                            BUILT TO</h1>
+                    </div>
+                </div>
+
+                <!-- Row 3: MOVE + Star -->
+                <div class="flex justify-start md:justify-end gap-5 w-full items-end relative">
+                    <div class="reveal-wrap">
+                        <h1
+                            class="text-[clamp(48px,15vw,200px)] font-bold leading-[0.85] uppercase tracking-tighter shrink-0 reveal-item text-left md:text-center">
+                            MOVE</h1>
+                    </div>
+                    <div class="reveal-wrap overflow-hidden">
+                        <div class="reveal-item">
+                            <div class="w-[40px] h-[40px] md:w-[150px] md:h-[150px] animate-spinStar">
+                                <img src="assets/img/brand/star-icon.svg" alt="Star" class="w-full h-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 4: Description (mobile only, at bottom) -->
+                <div class="reveal-wrap w-full md:hidden mt-8">
+                    <p class="text-[15px] leading-relaxed text-[#ccc] font-normal text-left reveal-item max-w-[90%]">
+                        SouthFlock → Building the moves that move your business. We help tech-driven brands
+                        scale faster through high-end animation - bridging the gap between strategic branding
+                        and motion design.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use a tool call to view the bottom of the file to confirm line numbers for JS edits -->
+
+        <!-- Video Section -->
+        <section id="reel-trigger" class="relative overflow-hidden h-[400px] md:h-[800px] cursor-none group"
+            data-cursor-text="Play">
+            <div class="absolute inset-0">
+                <video class="w-full h-full object-cover" autoplay muted loop playsinline
+                    poster="https://framerusercontent.com/images/UxJAJIk1igmtofme4co4gpXPjQ.jpg?scale-down-to=2048">
+                    <!-- Using a reliable high-quality placeholder video -->
+                    <source
+                        src="https://assets.mixkit.co/videos/preview/mixkit-digital-circuit-board-close-up-1582-large.mp4"
+                        type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500">
+                </div>
+            </div>
+
+            <!-- Play Button Overlay -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div
+                    class="w-24 h-24 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500">
+                    <div
+                        class="w-0 h-0 border-l-[24px] border-l-white border-t-[16px] border-t-transparent border-b-[16px] border-b-transparent ml-2">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Modal -->
+        <div id="video-modal"
+            class="fixed inset-0 z-[11000] bg-black/95 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500">
+            <div class="relative w-[90vw] h-[90vh] flex items-center justify-center">
+                <button id="close-modal"
+                    class="absolute -top-12 right-0 text-white text-sm font-bold uppercase tracking-widest hover:text-accent transition-colors flex items-center gap-2">
+                    Close [ESC]
+                </button>
+                <video id="full-reel-video" class="w-full h-full object-contain" controls>
+                    <source
+                        src="https://assets.mixkit.co/videos/preview/mixkit-digital-circuit-board-close-up-1582-large.mp4"
+                        type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <!-- The "Tomorrow's Brands" Split Section -->
+        <section class="section-padding bg-white" data-color="light">
+            <div class="split-divider mb-12" id="trigger-divider"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+                <!-- Left: Title -->
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-medium leading-tight reveal-wrap">
+                        <span class="reveal-item">Tomorrow’s brands, today.</span>
+                    </h2>
+                </div>
+                <!-- Right: Detailed Content -->
+                <div class="flex flex-col gap-8">
+                    <div class="reveal-wrap">
+                        <p class="text-xl md:text-2xl leading-relaxed reveal-item">
+                            We believe motion is more than aesthetics. → It’s about building trust and driving
+                            measurable growth through strategic storytelling. We don’t just make it look good - we
+                            make it move your business forward.
+                        </p>
+                    </div>
+                    <div class="reveal-wrap">
+                        <p class="text-xl md:text-2xl leading-relaxed reveal-item">
+                            By partnering closely with our clients, we ensure every project receives the dedicated
+                            focus and care it deserves to stay memorable across every touchpoint.
+                        </p>
+                    </div>
+                    <div class="mt-4 reveal-wrap">
+                        <div class="reveal-item">
+                            <a href="https://southflock.com/contact"
+                                class="double-arrow-link group inline-flex items-center transition-colors duration-300 hover:text-[#ff5c00]">
+                                <div class="relative overflow-hidden">
+                                    <span
+                                        class="block transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-y-full">
+                                        Build With us</span>
+                                    <span
+                                        class="absolute top-0 left-0 w-full block transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] translate-y-full group-hover:translate-y-0">Contact
+                                        Us</span>
+                                </div>
+                                <span
+                                    class="arrow-icon ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">↗</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="projects-grid-section" id="work">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="text-3xl uppercase md:text-5xl font-medium leading-tight reveal-wrap mb-8 md:mb-0">
+                        Selected
+                        Projects
+                    </h2>
+                </div>
+
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <a href="project-jan-brand.html" class="project-card">
+                        <div class="project-image-wrapper">
+                            <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-construction.webp"
+                                alt="Brand Evolution">
+
+                        </div>
+                        <div class="project-info">
+                            <div class="project-name uppercase italic-span">JAN DEINSTALLATIEMAN</div>
+                            <div class="project-category">Brand Identity</div>
+                        </div>
+                    </a>
+
+                    <!-- Project 2 -->
+                    <a href="comingsoon.html" class="project-card">
+                        <div class="project-image-wrapper">
+                            <img src="assets/img/fz-animation/southflock-fz-illustartion-animation-2d-frame.webp"
+                                alt="Animation">
+                        </div>
+                        <div class="project-info">
+                            <div class="project-name uppercase italic-span">FZ Construction</div>
+                            <div class="project-category">Animation</div>
+                        </div>
+                    </a>
+
+                    <!-- Project 3 -->
+                    <a href="project-story-motion.html" class="project-card">
+                        <div class="project-image-wrapper">
+                            <img src="assets/img/story-motion-brand/southflock-brand-identity-motion-system-lockup.webp"
+                                alt="Digital Launch">
+                        </div>
+                        <div class="project-info">
+                            <div class="project-name uppercase italic-span">Story of My Life</div>
+                            <div class="project-category">Motion Graphics</div>
+                        </div>
+                    </a>
+
+                    <!-- Project 4 -->
+                    <a href="project-hencor-brand.html" class="project-card">
+                        <div class="project-image-wrapper">
+                            <img src="assets/img/hencor-brand/southflock-brand-identity-system-signage.webp"
+                                alt="Brand Toolkit">
+                        </div>
+                        <div class="project-info">
+                            <div class="project-name uppercase italic-span">Hencor Group</div>
+                            <div class="project-category">Brand Identity</div>
+                        </div>
+                    </a>
+                    <!-- Project 5 -->
+                    <a href="project-malt-animation.html" class="project-card">
+                        <div class="project-image-wrapper">
+                            <img src="assets/img/malt-animation/southflock-malt-animation.webp" alt="Digital Launch">
+                        </div>
+                        <div class="project-info">
+                            <div class="project-name uppercase italic-span">Malt - New Year</div>
+                            <div class="project-category">Animation</div>
+                        </div>
+                    </a>
+
+                    <!-- Project 6 -->
+                    <a href="project-scottsdale-animation.html" class="project-card">
+                        <div class="project-image-wrapper">
+                            <img src="assets/img/scottsdale-motion/southflock-Scottsdale National Golf Club-animation-title.webp"
+                                alt="Motion Promo">
+                        </div>
+                        <div class="project-info">
+                            <div class="project-name uppercase italic-span">SCOTTSDALE NATIONAL GOLF CLUB</div>
+                            <div class="project-category">Animation</div>
+                        </div>
+                    </a>
+
+                </div>
+
+                <!-- Start Your Project Button -->
+                <div class="btn-wrapper">
+                    <a href="contact.html" class="view-all-btn">
+                        <span>Start Your Project</span>
+                        <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M25.2314 26.0405L25.2314 3.00413C25.2314 1.86581 24.3097 0.944087 23.1714 0.944086L0.135013 0.944089L0.135011 5.06418L18.1966 5.06418L0.0932449 23.1675L3.00703 26.0813L21.1104 7.97797L21.1104 26.0396L25.2314 26.0405Z"
+                                fill="currentColor" />
+                        </svg>
+                    </a>
+                </div>
+        </section>
+
+
+
+        <!-- Testimonial Section -->
+        <section class="w-full bg-white overflow-hidden">
+            <div class="w-full grid grid-cols-1 md:grid-cols-2 items-stretch">
+
+                <div
+                    class="flex flex-col justify-center items-start px-6 md:px-[80px] py-20 md:py-32 bg-white text-black">
+
+                    <div id="testimonial-carousel" class="relative overflow-hidden w-full">
+                        <div class="testimonial-track flex transition-transform duration-700 ease-in-out">
+
+                            <div class="testimonial-slide min-w-full">
+                                <div class="max-w-[700px]">
+                                    <p
+                                        class="text-3xl md:text-5xl font-medium leading-[1.15] text-black mb-10 tracking-tight">
+                                        "From understanding our ambitions, to executing with speed, SouthFlock
+                                        nailed it from the beginning."
+                                    </p>
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-black font-bold uppercase tracking-widest text-sm">Elliott
+                                            Rapaport</p>
+                                        <p class="text-[#888] text-sm">CEO, Birches Health</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="testimonial-slide min-w-full">
+                                <div class="max-w-[700px]">
+                                    <p
+                                        class="text-3xl md:text-5xl font-medium leading-[1.15] text-black mb-10 tracking-tight">
+                                        "Their motion design elevated our brand to a level we didn't think was
+                                        possible. Truly exceptional work."
+                                    </p>
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-black font-bold uppercase tracking-widest text-sm">Sarah Chen
+                                        </p>
+                                        <p class="text-[#888] text-sm">Creative Director, Flux Studios</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="testimonial-slide min-w-full">
+                                <div class="max-w-[700px]">
+                                    <p
+                                        class="text-3xl md:text-5xl font-medium leading-[1.15] text-black mb-10 tracking-tight">
+                                        "Working with SouthFlock was seamless. They brought our vision to life with
+                                        precision and creativity."
+                                    </p>
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-black font-bold uppercase tracking-widest text-sm">Marcus
+                                            Williams</p>
+                                        <p class="text-[#888] text-sm">Founder, Apex Ventures</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="testimonial-slide min-w-full">
+                                <div class="max-w-[700px]">
+                                    <p
+                                        class="text-3xl md:text-5xl font-medium leading-[1.15] text-black mb-10 tracking-tight">
+                                        "The attention to detail and commitment to excellence is unmatched.
+                                        SouthFlock is our go-to partner."
+                                    </p>
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-black font-bold uppercase tracking-widest text-sm">Priya
+                                            Patel</p>
+                                        <p class="text-[#888] text-sm">VP Marketing, TechFlow</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="w-full max-w-[full] h-[2px] bg-black/10 mt-16 md:mt-24 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 h-full bg-black w-full animate-progress origin-left">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center p-8 md:p-16 lg:p-24">
+                    <div class="relative w-full h-full min-h-[235px] md:min-h-[500px] rounded-sm overflow-hidden">
+                        <img src="assets/img/brand/southflock-brand-identity-logo-mockup-street.webp"
+                            alt="Brand Identity"
+                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+                    </div>
+                </div>
+        </section>
+
+        <!-- Client Logos Marquee -->
+        <section class=" py-5 border-b border-black/10">
+            <div class="px-6 md:px-[60px] mb-22">
+                <p class="text-sm font-bold opacity-50 text-center uppercase tracking-[0.2em]">
+                    Trusted by teams at
+                </p>
+            </div>
+
+            <div class="py-10 overflow-hidden whitespace-nowrap mask-linear-fade">
+                <div class="inline-flex items-center gap-20 animate-marquee">
+                    <!-- First set of logos -->
+                    <img src="assets/img/client-logo/aspen-digital.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/barranco.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/digitalsky.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/jones-&-co.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/malt.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/maze-creative.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/myplayers.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/Logo_VDB_LIME_RGB-e1713189635597.png" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/outtask_zwart.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+
+                    <!-- Duplicate set for seamless loop -->
+                    <img src="assets/img/client-logo/aspen-digital.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/barranco.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/digitalsky.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/jones-&-co.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/malt.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/maze-creative.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/myplayers.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/Logo_VDB_LIME_RGB-e1713189635597.png" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                    <img src="assets/img/client-logo/outtask_zwart.svg" alt="Client"
+                        class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity brightness-0">
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- The "Tomorrow's Brands" Split Section -->
+        <section class="section-padding bg-white" data-color="dark">
+            <div id="trigger-divider"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+
+                <!-- Left: image slider -->
+                <div class="flex items-center justify-start">
+                    <!-- Adjusted responsive width and height -->
+                    <!-- CHANGE SIZE HERE: Change the pixel values below -->
+                    <div class="relative overflow-hidden group w-full md:w-[880px] h-[300px] md:h-[480px]">
+
+                        <!-- Image 1 -->
+                        <img src="assets/img/southflock-work/southflock-ai-brand-identity-logo-mockup.webp"
+                            alt="Design Process 1"
+                            class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100 slideshow-img">
+
+                        <!-- Image 2 -->
+                        <img src="assets/img/southflock-work/southflock-pim-brand-identity.webp" alt="Design Process 2"
+                            class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0 slideshow-img">
+
+                        <!-- Image 3 -->
+                        <img src="assets/img/southflock-work/southflock-brave-space-co-brand-identity-logo.webp"
+                            alt="Design Process 3"
+                            class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0 slideshow-img">
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Detailed Content -->
+                <div class="flex flex-col gap-8">
+                    <div class="reveal-wrap">
+                        <p class="text-xl md:text-5xl font-medium leading-[1.15] text-black mb-10 tracking-tight">
+                            A partner for Startups, SaaS, and Premium Brands. → We specialize in brand
+                            identity and motion graphics that anchor marketing, product launches, and digital
+                            experiences with dedicated focus and care.
+                        </p>
+                    </div>
+                    <div class="mt-4 reveal-wrap">
+                        <div class="reveal-item">
+                            <a href="contact.html"
+                                class="double-arrow-link group inline-flex items-center transition-colors duration-300 hover:text-[#ff5c00]">
+                                <div class="relative overflow-hidden">
+                                    <span
+                                        class="block transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-y-full">Work
+                                        With Southflock</span>
+                                    <span
+                                        class="absolute top-0 left-0 w-full block transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] translate-y-full group-hover:translate-y-0">Start
+                                        Your Project</span>
+                                </div>
+                                <span
+                                    class="arrow-icon ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">↗</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Services / Capabilities Section -->
+        <section id="services" class="py-16 md:py-32 px-6 md:px-[60px] max-w-[full] mx-auto border-t border-black">
+            <div class="mb-16">
+                <span class="text-sm font-bold uppercase text-gray-dark tracking-widest">SERVICES</span>
+            </div>
+            <div class="flex flex-col">
+                <!-- Service Item 1: ANIMATION -->
+                <div class="service-item-reveal relative overflow-hidden flex items-center justify-between py-10 border-b border-gray-med cursor-default transition-all duration-300 hover:px-5 hover:border-black group gap-4 opacity-0 translate-y-8"
+                    style="animation-delay: 0.1s;">
+                    <!-- Accent Line -->
+                    <div
+                        class="absolute left-0 top-0 bottom-0 w-1 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top z-20">
+                    </div>
+                    <!-- Background Image (Right 50%) -->
+                    <div
+                        class="absolute right-0 top-0 bottom-0 w-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                        <img src="assets/img/southflock-work/southflock-motion-logo-identity-iphone.gif"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            alt="Animation">
+                    </div>
+                    <!-- Text Content (Left) -->
+                    <div class="flex flex-col gap-2 relative z-10 max-w-[60%] md:max-w-[45%]">
+                        <div
+                            class="text-[clamp(24px,4vw,64px)] font-medium uppercase tracking-tight transition-all duration-300">
+                            Animation</div>
+                        <div
+                            class="text-sm md:text-lg font-medium leading-relaxed text-gray-dark transition-all duration-300">
+                            Motion Graphics, Explainer Animation, 2D & 3D Animation</div>
+                    </div>
+                    <!-- Arrow (Right) -->
+                    <div
+                        class="text-2xl font-light relative z-20 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 mr-4 md:mr-16 group-hover:text-white">
+                        →</div>
+                </div>
+
+                <!-- Service Item 2: BRANDING -->
+                <div class="service-item-reveal relative overflow-hidden flex items-center justify-between py-10 border-b border-gray-med cursor-default transition-all duration-300 hover:px-5 hover:border-black group gap-4 opacity-0 translate-y-8"
+                    style="animation-delay: 0.2s;">
+                    <div
+                        class="absolute left-0 top-0 bottom-0 w-1 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top z-20">
+                    </div>
+                    <div
+                        class="absolute right-0 top-0 bottom-0 w-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-construction.webp"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            alt="Branding">
+                    </div>
+                    <div class="flex flex-col gap-2 relative z-10 max-w-[60%] md:max-w-[45%]">
+                        <div
+                            class="text-[clamp(24px,4vw,64px)] font-medium uppercase tracking-tight transition-all duration-300">
+                            BRANDING</div>
+                        <div
+                            class="text-sm md:text-lg font-medium leading-relaxed text-gray-dark transition-all duration-300">
+                            Visual Identity, Logo Design, Design Systems, Brand Guidelines</div>
+                    </div>
+                    <div
+                        class="text-2xl font-light relative z-20 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 mr-4 md:mr-16 group-hover:text-white">
+                        →</div>
+                </div>
+
+                <!-- Service Item 3: DIGITAL -->
+                <div class="service-item-reveal relative overflow-hidden flex items-center justify-between py-10 border-b border-gray-med cursor-default transition-all duration-300 hover:px-5 hover:border-black group gap-4 opacity-0 translate-y-8"
+                    style="animation-delay: 0.3s;">
+                    <div
+                        class="absolute left-0 top-0 bottom-0 w-1 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top z-20">
+                    </div>
+                    <div
+                        class="absolute right-0 top-0 bottom-0 w-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                        <img src="assets/img/southflock-work/southflock-brave-space-co-brand-identity-logo.webp"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            alt="Digital">
+                    </div>
+                    <div class="flex flex-col gap-2 relative z-10 max-w-[60%] md:max-w-[45%]">
+                        <div
+                            class="text-[clamp(24px,4vw,64px)] font-medium uppercase tracking-tight transition-all duration-300">
+                            DIGITAL</div>
+                        <div
+                            class="text-sm md:text-lg font-medium leading-relaxed text-gray-dark transition-all duration-300">
+                            Web Design, Development, UX/UI, Webflow, Rive</div>
+                    </div>
+                    <div
+                        class="text-2xl font-light relative z-20 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 mr-4 md:mr-16 group-hover:text-white">
+                        →</div>
+                </div>
+
+                <!-- Service Item 4: CONTENT -->
+                <div class="service-item-reveal relative overflow-hidden flex items-center justify-between py-10 border-b border-gray-med cursor-default transition-all duration-300 hover:px-5 hover:border-black group gap-4 opacity-0 translate-y-8"
+                    style="animation-delay: 0.4s;">
+                    <div
+                        class="absolute left-0 top-0 bottom-0 w-1 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top z-20">
+                    </div>
+                    <div
+                        class="absolute right-0 top-0 bottom-0 w-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                        <img src="assets/img/southflock-work/southflock-motion-identity.gif"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            alt="Content">
+                    </div>
+                    <div class="flex flex-col gap-2 relative z-10 max-w-[60%] md:max-w-[45%]">
+                        <div
+                            class="text-[clamp(24px,4vw,64px)] font-medium uppercase tracking-tight transition-all duration-300">
+                            CONTENT</div>
+                        <div
+                            class="text-sm md:text-lg font-medium leading-relaxed text-gray-dark transition-all duration-300">
+                            Motion Design, Creative & Visuals Direction, Copywriting</div>
+                    </div>
+                    <div
+                        class="text-2xl font-light relative z-20 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 mr-4 md:mr-16 group-hover:text-white">
+                        →</div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="Explore">
+            <div class="mt-16 md:mt-32 py-12 md:py-20 flex flex-col items-center justify-center w-full bg-black px-6">
+                <div class="reveal-wrap text-white text-center flex flex-col items-center">
+                    <h2 class="text-2xl md:text-5xl font-medium leading-tight mb-6 tracking-tight reveal-item">
+                        Explore Some of Our Work
+                    </h2>
+
+                    <div class="reveal-item mt-8 animate-bounce opacity-50 hover:opacity-100 transition-opacity">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 13L12 18L17 13M7 6L12 11L17 6" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="image-grid-section">
+            <div class="grid-container">
+                <div class="image-grid">
+
+                    <!-- Box 1 - Large Feature -->
+                    <div class="grid-item box-1">
+                        <img src="assets/img/southflock-work/southflock-pim-brand-identity.webp" alt="Feature">
+                    </div>
+
+                    <!-- Box 2 -->
+                    <div class="grid-item box-2">
+                        <img src="assets/img/southflock-work/southflock-brave-space-co-brand-identity-logo.webp" alt="">
+                    </div>
+
+                    <!-- Box 3 -->
+                    <div class="grid-item box-3">
+                        <img src="assets/img/jan-brand/southflock-brand-identity-system-jan-construction.webp" alt="">
+                    </div>
+
+                    <!-- Box 4 -->
+                    <div class="grid-item box-4">
+                        <img src="assets/img/southflock-work/southflock-motion-identity-3d.gif" alt="">
+                    </div>
+
+                    <!-- Box 5 -->
+                    <div class="grid-item box-5">
+                        <img src="assets/img/brand/southflock-brand-identity-mockup.webp" alt="">
+                    </div>
+
+                    <!-- Box 6 - Large Feature -->
+                    <div class="grid-item box-6">
+                        <img src="assets/img/southflock-work/southflock-pim-brand-identity.webp" alt="Feature">
+                    </div>
+
+                    <!-- Box 7 -->
+                    <div class="grid-item box-7">
+                        <img src="assets/img/southflock-work/southflock-brave-space-co-brand-identity-logo.webp" alt="">
+                    </div>
+
+                    <!-- Box 8 -->
+                    <div class="grid-item box-8">
+                        <img src="assets/img/grid/southflock-brand-animation-33d.gif" alt="">
+                    </div>
+
+                    <!-- Box 9 -->
+                    <div class="grid-item box-9">
+                        <img src="assets/img/southflock-work/southflock-motion-identity-3d.gif" alt="">
+                    </div>
+
+                    <!-- Box 10 -->
+                    <div class="grid-item box-10">
+                        <img src="assets/img/brand/southflock-brand-identity-mockup.webp" alt="">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 px-[60px] text-center bg-black text-white">
+            <div class="max-w-4xl mx-auto">
+                <div class="reveal-wrap">
+                    <h1
+                        class="text-[clamp(48px,8vw,120px)] font-medium tracking-tighter mb-5 leading-[0.9] reveal-item">
+                        Build
+                        momentum through motion</h1>
+                </div>
+                <div class="reveal-wrap">
+                    <p class="text-2xl opacity-80 mb-12 font-medium reveal-item">Translating vision into fluid
+                        brand
+                        experiences
+                        with motion that moves the
+                        needle.</p>
+                </div>
+                <div class="reveal-wrap">
+                    <div class="reveal-item">
+                        <a href="contact.html"
+                            class="inline-block bg-white text-black px-12 py-6 text-2xl font-bold rounded-full transition-transform duration-200 hover:scale-105 hover:bg-brand-blue hover:text-white ">Let’s
+                            get to work</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <footer class="p-10 bg-black text-white/60 border-t border-white/10">
+        <div class="flex justify-between text-sm font-medium">
+            <div class="flex gap-5">
+                <span class="font-bold text-white">SouthFlock</span>
+                <span>© 2026</span>
+            </div>
+            <div class="flex gap-5">
+                <a href="https://www.instagram.com/southflock.studio/"
+                    class="hover:text-white transition-colors">Instagram</a>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Custom Cursor Logic ---
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+        let dotX = 0, dotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        const animateCursor = () => {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            dotX += (mouseX - dotX) * 0.4;
+            dotY += (mouseY - dotY) * 0.4;
+
+            gsap.set(cursorRing, { x: ringX - 20, y: ringY - 20 });
+            gsap.set(cursorDot, { x: dotX - 4, y: dotY - 4 });
+
+            requestAnimationFrame(animateCursor);
+        };
+        animateCursor();
+
+        // Cursor States
+        function initCursorStates() {
+            const interactive = document.querySelectorAll('a, .magnet-btn, .group, nav div, .service-item-reveal');
+            interactive.forEach(el => {
+                el.addEventListener('mouseenter', (e) => {
+                    const text = el.getAttribute('data-cursor-text');
+                    if (text) {
+                        cursorRing.innerHTML = `<span>${text}</span>`;
+                        gsap.to(cursorRing, { width: 80, height: 80, backgroundColor: 'white', color: 'black', border: 'none', mixBlendMode: 'normal', duration: 0.3 });
+                        gsap.to(cursorDot, { opacity: 0, duration: 0.2 });
+                    } else {
+                        gsap.to(cursorRing, { scale: 1.5, borderColor: '#ff5f00', mixBlendMode: 'normal', duration: 0.3 });
+                    }
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorRing.innerHTML = '';
+                    gsap.to(cursorRing, { width: 40, height: 40, backgroundColor: 'transparent', scale: 1, borderColor: 'white', mixBlendMode: 'difference', duration: 0.3 });
+                    gsap.to(cursorDot, { opacity: 1, duration: 0.2 });
+                });
+            });
+        }
+        initCursorStates();
+
+        // --- Hero Reveal Animations ---
+        gsap.to(".hero-container .reveal-item", {
+            y: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "expo.out",
+            delay: 0.5
+        });
+
+        // --- Generic Reveal Animation (Non-Hero) ---
+        gsap.utils.toArray("section:not(.hero-container) .reveal-item").forEach(item => {
+            gsap.to(item, {
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 85%"
+                }
+            });
+        });
+
+        // --- Split Divider Animation ---
+        gsap.to("#trigger-divider", {
+            scaleX: 1,
+            duration: 1.5,
+            ease: "expo.out",
+            scrollTrigger: {
+                trigger: "#trigger-divider",
+                start: "top 80%"
+            }
+        });
+
+        // --- Services Reveal Animation ---
+        gsap.utils.toArray(".service-item-reveal").forEach(item => {
+            gsap.to(item, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 90%"
+                }
+            });
+        });
+
+        // --- Image Grid Reveal Animation ---
+        gsap.from(".image-grid .grid-item", {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".image-grid",
+                start: "top 80%"
+            }
+        });
+
+
+        // --- Image Slideshow Logic ---
+        const slideshowImages = document.querySelectorAll('.slideshow-img');
+        if (slideshowImages.length > 0) {
+            let currentSlide = 0;
+            setInterval(() => {
+                // Fade out current
+                slideshowImages[currentSlide].classList.remove('opacity-100');
+                slideshowImages[currentSlide].classList.add('opacity-0');
+
+                // Advance index
+                currentSlide = (currentSlide + 1) % slideshowImages.length;
+
+                // Fade in next
+                slideshowImages[currentSlide].classList.remove('opacity-0');
+                slideshowImages[currentSlide].classList.add('opacity-100');
+            }, 3000); // Change every 3 seconds
+        }
+    </script>
+
+
+    <script>
+        (function () {
+            const serviceItems = document.querySelectorAll('.services-section .service-item');
+            const videoCells = document.querySelectorAll('.services-section .video-cell');
+            const videoPreview = document.getElementById('servicesVideoPreview');
+            const previewVideo = document.getElementById('servicesPreviewVideo');
+            let currentActive = null;
+
+            // Preload videos
+            videoCells.forEach(cell => {
+                const video = cell.querySelector('video');
+                video.load();
+                video.play().then(() => {
+                    video.pause();
+                    video.currentTime = 0;
+                }).catch(() => { });
+            });
+
+            serviceItems.forEach((item, index) => {
+                item.addEventListener('mouseenter', () => {
+                    if (currentActive !== null) {
+                        serviceItems[currentActive].classList.remove('active');
+                        videoCells.forEach(cell => {
+                            cell.classList.remove('active');
+                            cell.querySelector('video').pause();
+                        });
+                    }
+
+                    currentActive = index;
+                    item.classList.add('active');
+
+                    videoCells.forEach(cell => {
+                        if (parseInt(cell.dataset.service) === index) {
+                            cell.classList.add('active');
+                            const video = cell.querySelector('video');
+                            video.currentTime = 0;
+                            video.play().catch(() => { });
+                        }
+                    });
+
+                    const videoSrc = item.dataset.video;
+                    if (videoSrc && previewVideo.src !== videoSrc) {
+                        previewVideo.src = videoSrc;
+                        previewVideo.load();
+                    }
+                    previewVideo.currentTime = 0;
+                    previewVideo.play().catch(() => { });
+                    videoPreview.classList.add('active');
+                });
+            });
+
+            document.querySelector('.services-section').addEventListener('mouseleave', () => {
+                if (currentActive !== null) {
+                    serviceItems[currentActive].classList.remove('active');
+                    videoCells.forEach(cell => {
+                        cell.classList.remove('active');
+                        cell.querySelector('video').pause();
+                    });
+                    currentActive = null;
+                }
+                videoPreview.classList.remove('active');
+                previewVideo.pause();
+            });
+        })();
+    </script>
+    <div class="cinematic-overlay">
+        <div class="bottom-blur"></div>
+        <div class="grain-overlay"></div>
+    </div>
+
+
+</body>
+
+</html>
